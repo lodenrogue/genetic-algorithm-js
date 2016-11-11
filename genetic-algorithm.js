@@ -1,10 +1,12 @@
-function GeneticAlgorithm(genIndv, popSize, getFitness, goalFitness, mutate, mutProb) {
+function GeneticAlgorithm(genIndv, popSize, getFitness, goalFitness, mutate, mutProb, breedFunction) {
 
 	this.runSimulation = function(generations) {
 		let population = generatePopulation(genIndv, popSize);
 		for(var i = 0; i < generations; i++) {
 			population = sortByFitness(population, getFitness, goalFitness);
-			population = crossBreed(population, mutate, mutProb);
+			
+			breedFunction = breedFunction == undefined ? crossBreed : breedFunction;
+			population = breed(population, mutate, mutProb, breedFunction);
 		}
 		population = sortByFitness(population, getFitness, goalFitness);
 		let results = getResults(population, getFitness, generations);
@@ -31,7 +33,7 @@ function GeneticAlgorithm(genIndv, popSize, getFitness, goalFitness, mutate, mut
 	};
 
 	// Cross breed population and apply mutation if mutProb met
-	function crossBreed(population, mutate, mutProb) {
+	function breed(population, mutate, mutProb, breedFunction) {
 
 		// Select best individuals and remove bottom half of population
 		let breeders = Math.round(population.length / 2);
@@ -49,14 +51,7 @@ function GeneticAlgorithm(genIndv, popSize, getFitness, goalFitness, mutate, mut
 			let parentA = population[parentAIndex];
 			let parentB = population[parentBIndex];
 
-			// Select cutOff point and create newborn
-			let cutOff = Math.floor(Math.random() * parentA.length);
-			let newborn = parentA.slice(0, cutOff + 1);
-			let parentBChrom = parentB.slice(cutOff + 1, parentB.length);
-			
-			for(var i = 0; i < parentBChrom.length; i++ ){
-				newborn.push(parentBChrom[i]);
-			}
+			let newborn = breedFunction(parentA, parentB);
 
 			// Mutate newborn
 			if(Math.random() <= mutProb) {
@@ -66,6 +61,18 @@ function GeneticAlgorithm(genIndv, popSize, getFitness, goalFitness, mutate, mut
 		}
 		return newPopulation;
 	};
+
+	function crossBreed(parentA, parentB) {
+		// Select cutOff point and create newborn
+		let cutOff = Math.floor(Math.random() * parentA.length);
+		let newborn = parentA.slice(0, cutOff + 1);
+		let parentBChrom = parentB.slice(cutOff + 1, parentB.length);
+
+		for(var i = 0; i < parentBChrom.length; i++ ){
+			newborn.push(parentBChrom[i]);
+		}
+		return newborn;
+	}
 
 	function getResults(population, getFitness, generations) {
 		let results = {generations: generations, population: []};

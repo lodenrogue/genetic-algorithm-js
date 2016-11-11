@@ -1,3 +1,13 @@
+/* 
+
+This example illustrates the simplest use of the library
+
+You define how to create an individual
+You define how to measure the fittness of an individual
+and you define how to mutate an individual
+
+*/
+
 function generateIndividual() {
 	let array = [];
 	for(var i = 0; i < 10; i++){
@@ -26,4 +36,4 @@ var mutProb = .1;
 var generations = 10;
 
 var gen = new GeneticAlgorithm(generateIndividual, popSize, getFitness, fitnessGoal, mutate, mutProb);
-console.log(gen.runSimulation(generations));
+console.log("Simple Array Example:", gen.runSimulation(generations));
