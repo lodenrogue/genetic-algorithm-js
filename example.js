@@ -30,10 +30,19 @@ function mutate(indv) {
 	return indv;
 }
 
+// Create a toolbox
+var toolbox = new Toolbox();
+toolbox.genIndv = generateIndividual;
+toolbox.getFitness = getFitness;
+toolbox.goalFitness = Toolbox.fitnessMax;
+toolbox.mutate = mutate;
+
+// Create parameters
 var popSize = 10;
-var fitnessGoal = 1;
 var mutProb = .1;
 var generations = 10;
+var breedFunction = Algorithms.crossBreed;
 
-var gen = new GeneticAlgorithm(generateIndividual, popSize, getFitness, fitnessGoal, mutate, mutProb);
-console.log("Simple Array Example:", gen.runSimulation(generations));
+// Create 
+var gen = new GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction);
+console.log("Simple Array Example:", gen.evolve(generations));

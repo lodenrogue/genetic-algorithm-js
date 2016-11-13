@@ -64,12 +64,19 @@ function breedFunction(parent0, parent1) {
 	return newborn;
 };
 
+// Create a toolbox
+var toolbox = new Toolbox();
+toolbox.genIndv = generateIndividual;
+toolbox.getFitness = getFitness;
+toolbox.goalFitness = Toolbox.fitnessMin;
+toolbox.mutate = mutate;
+
+// Create parameters
 var popSize = 100;
-var fitnessGoal = -1;
 var mutProb = .1;
 var generations = 100;
 
-var gen = new GeneticAlgorithm(generateIndividual, popSize, getFitness, fitnessGoal, mutate, mutProb, breedFunction);
-console.log("Complex Contraint Example:", gen.runSimulation(generations));
+var gen = new GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction);
+console.log("Custom Breed Function Example:", gen.evolve(generations));
 
 
