@@ -23,6 +23,7 @@ function GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction, verbose = fa
             if (verbose) printUpdate(population, i);
             population = breed(population, toolbox.mutate, mutProb, breedFunction);
         }
+        population = getFitness(population, toolbox.getFitness);
         population = sortByFitness(population, toolbox.getFitness, toolbox.goalFitness);
         let results = getResults(population, toolbox.getFitness, generations);
         return results;
