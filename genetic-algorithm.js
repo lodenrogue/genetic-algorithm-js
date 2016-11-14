@@ -8,7 +8,7 @@ function Toolbox() {
 Toolbox.fitnessMax = 1;
 Toolbox.fitnessMin = -1;
 
-function GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction) {
+function GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction, verbose = false) {
 
     if (popSize <= 2) {
         throw "Population size must be greater than 2. Current size: " + popSize;
@@ -18,7 +18,9 @@ function GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction) {
         let population = generatePopulation(toolbox.genIndv, popSize);
 
         for (var i = 0; i < generations; i++) {
+            population = getFitness(population, toolbox.getFitness);
             population = sortByFitness(population, toolbox.getFitness, toolbox.goalFitness);
+            if (verbose) printUpdate(population, i);
             population = breed(population, toolbox.mutate, mutProb, breedFunction);
         }
         population = sortByFitness(population, toolbox.getFitness, toolbox.goalFitness);
@@ -32,15 +34,25 @@ function GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction) {
     function generatePopulation(genIndv, popSize) {
         let pop = [];
         for (var i = 0; i < popSize; i++) {
-            pop.push(genIndv());
+            let indv = { individual: genIndv() }
+            pop.push(indv);
         }
         return pop;
     };
 
+    function getFitness(population, getFitness){
+        for (var i = 0; i < population.length; i++){
+            let indv = population[i];
+            indv.fitness = getFitness(indv.individual);
+            population[i] = indv;
+        }
+        return population;
+    }
+
     // Sort the population array
     function sortByFitness(population, getFitness, goalFitness) {
         population.sort(function(a, b) {
-            return (getFitness(b) - getFitness(a)) * goalFitness;
+            return (b.fitness - a.fitness) * goalFitness;
         });
         return population;
     };
@@ -61,8 +73,8 @@ function GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction) {
                 parentBIndex = Math.floor(Math.random() * breeders);
             }
 
-            let parentA = population[parentAIndex];
-            let parentB = population[parentBIndex];
+            let parentA = population[parentAIndex].individual;
+            let parentB = population[parentBIndex].individual;
 
             // Create newborn
             let newborn = breedFunction(parentA, parentB);
@@ -71,7 +83,7 @@ function GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction) {
             if (Math.random() <= mutProb) {
                 newborn = mutate(newborn);
             }
-            newPopulation.push(newborn);
+            newPopulation.push({ individual: newborn });
         }
         return newPopulation;
     };
@@ -83,13 +95,19 @@ function GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction) {
         };
         for (var i = 0; i < population.length; i++) {
             let indv = population[i];
-            let fitness = getFitness(indv);
-            results.population.push({
-                individual: indv,
-                fitness: fitness
-            });
+            results.population.push(indv);
         }
         return results;
+    };
+
+    function printUpdate(population, generation) {
+        let fittestScore = population[0].fitness;
+        let sum = 0;
+        for (var i = 0; i < population.length; i++) {
+            sum += population[i].fitness;
+        }
+        let average = sum / population.length;
+        console.log("Generation:", generation, "Fittest:", fittestScore, "Average:", average);
     };
 };
 
