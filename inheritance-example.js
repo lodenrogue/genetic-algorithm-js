@@ -39,7 +39,7 @@ function getFitness(indv) {
 
 function mutate(indv) {
 	let randIndex = Math.floor(Math.random() * indv.length);
-	indv[randIndex] = Math.floor(Math.random() * inheritors) + 1;
+	indv[randIndex] = Math.floor(Math.random() * inheritors);
 	return indv;
 }
 
