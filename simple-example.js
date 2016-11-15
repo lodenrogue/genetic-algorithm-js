@@ -43,6 +43,6 @@ var mutProb = .1;
 var generations = 10;
 var breedFunction = Algorithms.crossBreed;
 
-// Create 
+// Create genetic algorithm and evolve individuals
 var gen = new GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction, true);
 console.log("Simple Array Example:", gen.evolve(generations));

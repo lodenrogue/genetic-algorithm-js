@@ -11,7 +11,7 @@ And the product of all in the second pile is as close as possible to 360.
 
 function generateIndividual() {
 	let array = [];
-	let numbers = [1, 2,3 , 4, 5,6 , 7, 8, 9, 10];
+	let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 	for(var i = 0; i < numbers.length; i++) {
 		let randIndex = Math.floor(Math.random() * numbers.length);
@@ -76,7 +76,6 @@ var popSize = 100;
 var mutProb = .1;
 var generations = 100;
 
+// Create genetic algorithm and evolve individuals
 var gen = new GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction);
 console.log("Custom Breed Function Example:", gen.evolve(generations));
-
-
