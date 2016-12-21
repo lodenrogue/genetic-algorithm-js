@@ -10,9 +10,31 @@ Toolbox.fitnessMin = -1;
 
 function GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction, verbose = false) {
 
-    if (popSize <= 2) {
-        throw "Population size must be greater than 2. Current size: " + popSize;
-    }
+    checkConstructorVars(toolbox, popSize, mutProb, breedFunction);
+
+    function checkConstructorVars(toolbox, popsize, mutProb, breedFunction) {
+        if(toolbox === undefined) {
+            throw 'Toolbox must be defined';
+        }
+
+        if(popSize === undefined) {
+            throw 'Population size must be defined';
+        }
+
+        if (popSize <= 2) {
+            throw 'Population size must be greater than 2. Current size: ' + popSize;
+        }
+
+        if(mutProb === undefined) {
+            throw 'Mutability probability must be defined';
+        }
+
+        if(breedFunction === undefined) {
+            throw 'Breed function must be defined';
+        }
+    };
+
+    
 
     this.evolve = function(generations) {
         let population = generatePopulation(toolbox.genIndv, popSize);
