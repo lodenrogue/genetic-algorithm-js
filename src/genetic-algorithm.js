@@ -57,7 +57,7 @@ function GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction, verbose = fa
 
     // Generate a population with the given individual 
     // generation strategy and population size
-    function generatePopulation(genIndv, popSize) {
+    this.generatePopulation = function(genIndv, popSize) {
         let pop = [];
         for (var i = 0; i < popSize; i++) {
             let indv = { individual: genIndv() }
