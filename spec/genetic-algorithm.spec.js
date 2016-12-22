@@ -1,10 +1,10 @@
 describe("Genetic Algorithm", function() {
 
 	describe('Creation', function() {
-		var toolbox;
-		var popSize;
-		var mutProb;
-		var breedFunction;
+		let toolbox;
+		let popSize;
+		let mutProb;
+		let breedFunction;
 
 		beforeEach(function(done) {
 			toolbox = new Toolbox();
@@ -52,13 +52,13 @@ describe("Genetic Algorithm", function() {
 	});
 
 	describe('Generate Population', function() {
-		var ga;
-		var toolbox;
-		var individual;
-		var popSize;
-		var mutProb;
-		var breedFunction;
-		var population;
+		let ga;
+		let toolbox;
+		let individual;
+		let popSize;
+		let mutProb;
+		let breedFunction;
+		let population;
 
 		beforeEach(function(done) {
 			individual = [1, 1, 1, 1];
@@ -83,21 +83,21 @@ describe("Genetic Algorithm", function() {
 		});
 
 		it('should generate individuals of type object', function() {
-			for(var i = 0; i < population.length; i++) {
+			for(let i = 0; i < population.length; i++) {
 				expect(population[i] instanceof Object).toBe(true);
 			}
 		});
 
 		it('should generate individuals with attribute of type array', function() {
-			for(var i = 0; i < population.length; i++) {
+			for(let i = 0; i < population.length; i++) {
 				expect(population[i].individual instanceof Array).toBe(true);
 			}
 		});
 
 		it('should generate individuals equal to test individual', function() {
-			for(var i = 0; i < population.length; i++) {
-				var generatedIndividual = population[i].individual;
-				for(var j = 0; j < generatedIndividual.length; j++) {
+			for(let i = 0; i < population.length; i++) {
+				let generatedIndividual = population[i].individual;
+				for(let j = 0; j < generatedIndividual.length; j++) {
 					expect(generatedIndividual[i] === individual[i]).toBe(true);
 				}
 			}
@@ -105,13 +105,13 @@ describe("Genetic Algorithm", function() {
 	});
 
 	describe('Get Fitness', function() {
-		var ga;
-		var toolbox;
-		var individual;
-		var popSize;
-		var mutProb;
-		var breedFunction;
-		var population;
+		let ga;
+		let toolbox;
+		let individual;
+		let popSize;
+		let mutProb;
+		let breedFunction;
+		let population;
 
 		beforeEach(function(done) {
 			individual = [1, 1, 1, 1];
@@ -129,13 +129,76 @@ describe("Genetic Algorithm", function() {
 		});
 
 		it('should return correct fitness value for all individuals', function() {
-			var evaluatedPopulation = ga.getFitness(population, toolbox.getFitness);
+			let evaluatedPopulation = ga.getFitness(population, toolbox.getFitness);
 			
-			for(var i = 0; i < evaluatedPopulation.length; i++) {
-				var individualFitness = evaluatedPopulation[i].fitness;
+			for(let i = 0; i < evaluatedPopulation.length; i++) {
+				let individualFitness = evaluatedPopulation[i].fitness;
 				expect(individualFitness).toBe(4);
 			}
-		})
-	})
+		});
+	});
+
+	describe('Sort by Fitness', function() {
+		let ga;
+		let toolbox;
+		let popSize;
+		let mutProb;
+		let breedFunction;
+		let population;
+
+		beforeEach(function(done) {
+			popSize = 10;
+			mutProb = .10;
+
+			toolbox = new Toolbox();
+			toolbox.genIndv = function() {
+				let indv = [];
+				for(let j = 0; j < 10; j++) {
+					indv.push(Math.round(Math.random()));
+				}
+				return indv;
+			};
+
+			toolbox.getFitness = function(indv) { 
+				let fitness = 0;
+				for(let i = 0; i < indv.length; i++) {
+					fitness += indv[i];
+				}
+				return fitness; 
+			};
+			
+			breedFunction = Algorithms.crossBreed;
+
+			ga = new GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction);
+			population = ga.generatePopulation(toolbox.genIndv, popSize);
+			done();
+		});
+
+		it('should sort population in ascending order by fitness value when fitness goal is max', function() {
+			toolbox.goalFitness = Toolbox.fitnessMax;
+			population = ga.getFitness(population, toolbox.getFitness);
+			let sortedPopulation = ga.sortByFitness(population, toolbox.getFitness, toolbox.goalFitness);
+
+			let previousFitness = 100;
+			for(let i = 0; i < sortedPopulation.length; i++) {
+				let fitness = sortedPopulation[i].fitness;
+				expect(fitness).not.toBeGreaterThan(previousFitness);
+				previousFitness = fitness;
+			}
+		});
+
+		it('should sort population in descending order by fitness value when fitness goal is min', function() {
+			toolbox.goalFitness = Toolbox.fitnessMin;
+			population = ga.getFitness(population, toolbox.getFitness);
+			let sortedPopulation = ga.sortByFitness(population, toolbox.getFitness, toolbox.goalFitness);
+
+			let previousFitness = -1;
+			for(let i = 0; i < sortedPopulation.length; i++) {
+				let fitness = sortedPopulation[i].fitness;
+				expect(fitness).not.toBeLessThan(previousFitness);
+				previousFitness = fitness;
+			}
+		});
+	});
 	
 });

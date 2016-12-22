@@ -76,7 +76,7 @@ function GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction, verbose = fa
     }
 
     // Sort the population array
-    function sortByFitness(population, getFitness, goalFitness) {
+    this.sortByFitness = function(population, getFitness, goalFitness) {
         population.sort(function(a, b) {
             return (b.fitness - a.fitness) * goalFitness;
         });
