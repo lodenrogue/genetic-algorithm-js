@@ -66,7 +66,7 @@ function GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction, verbose = fa
         return pop;
     };
 
-    function getFitness(population, getFitness){
+    this.getFitness = function(population, getFitness) {
         for (var i = 0; i < population.length; i++){
             let indv = population[i];
             indv.fitness = getFitness(indv.individual);
