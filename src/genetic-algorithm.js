@@ -37,17 +37,17 @@ function GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction, verbose = fa
     
 
     this.evolve = function(generations) {
-        let population = generatePopulation(toolbox.genIndv, popSize);
+        let population = this.generatePopulation(toolbox.genIndv, popSize);
 
         for (var i = 0; i < generations; i++) {
-            population = getFitness(population, toolbox.getFitness);
-            population = sortByFitness(population, toolbox.getFitness, toolbox.goalFitness);
+            population = this.getFitness(population, toolbox.getFitness);
+            population = this.sortByFitness(population, toolbox.getFitness, toolbox.goalFitness);
 
             if (verbose) printUpdate(population, i);
             population = breed(population, toolbox.mutate, mutProb, breedFunction);
         }
-        population = getFitness(population, toolbox.getFitness);
-        population = sortByFitness(population, toolbox.getFitness, toolbox.goalFitness);
+        population = this.getFitness(population, toolbox.getFitness);
+        population = this.sortByFitness(population, toolbox.getFitness, toolbox.goalFitness);
         if (verbose) printUpdate(population, generations);
 
         let results = getResults(population, toolbox.getFitness, generations);
