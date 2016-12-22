@@ -59,6 +59,7 @@ describe("Genetic Algorithm", function() {
 		var popSize;
 		var mutProb;
 		var breedFunction;
+		var population;
 
 		beforeEach(function(done) {
 			individual = [1, 1, 1, 1];
@@ -75,17 +76,31 @@ describe("Genetic Algorithm", function() {
 			breedFunction = Algorithms.crossBreed;
 
 			ga = new GeneticAlgorithm(toolbox, popSize, mutProb, breedFunction);
+			population = ga.generatePopulation(toolbox.genIndv, popSize);
 			done();
 		});
 
 		it('should return an array', function() {
-			var population = ga.generatePopulation(toolbox.genIndv, popSize);
 			expect(population instanceof Array).toBe(true);
 		});
 
 		it('should return an array of the same size as popSize', function() {
-			var population = ga.generatePopulation(toolbox.genIndv, popSize);
 			expect(population.length).toBe(popSize);
+		});
+
+		it('should generate individuals of type object', function() {
+			for(var i = 0; i < population.length; i++) {
+				expect(population[i] instanceof Object).toBe(true);
+			}
+		});
+
+		it('should generate individuals with attributes equal to test individual', function() {
+			for(var i = 0; i < population.length; i++) {
+				var generatedIndividual = population[i].individual;
+				for(var j = 0; j < generatedIndividual.length; j++) {
+					expect(generatedIndividual[i] === individual[i]).toBe(true);
+				}
+			}
 		});
 	});
 	
