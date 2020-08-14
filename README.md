@@ -1,4 +1,4 @@
-# Genetic Algorithm JS
+# JSDarwin - Genetic Algorithm JS
 Genetic algorithm library written in JavaScript
 
 
