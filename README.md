@@ -71,7 +71,7 @@ toolbox.getFitness = getFitness;
 toolbox.mutate = mutate;
 ```
     
-Set the goal fitness. If a larger fitness is desired than use Toolbox.fitnessMax; otherwise use Toolbox.fitnessMin.
+Set the goal fitness. If a larger fitness is desired then use Toolbox.fitnessMax; otherwise use Toolbox.fitnessMin.
 
 ```javascript
 toolbox.goalFitness = Toolbox.fitnessMax;
