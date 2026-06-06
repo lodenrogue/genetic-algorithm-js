@@ -75,7 +75,7 @@ Set the goal fitness. If a larger fitness is desired then use Toolbox.fitnessMax
 
 ```javascript
 toolbox.goalFitness = Toolbox.fitnessMax;
- ```   
+```   
     
 ### Define evolution parameters
 
